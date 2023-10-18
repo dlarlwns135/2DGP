@@ -45,7 +45,8 @@ class Idle:
 
     @staticmethod
     def exit(boy, e):
-        pass
+        if space_down(e):
+            boy.fire_ball()
 
     @staticmethod
     def do(boy):
@@ -70,7 +71,8 @@ class Run:
 
     @staticmethod
     def exit(boy, e):
-        pass
+        if space_down(e):
+            boy.fire_ball()
 
     @staticmethod
     def do(boy):
@@ -114,8 +116,8 @@ class StateMachine:
         self.boy = boy
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep, space_down: Idle},
+            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
             Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: Idle}
         }
 
@@ -161,3 +163,9 @@ class Boy:
 
     def draw(self):
         self.state_machine.draw()
+
+    def fire_ball(self):
+        if self.face_dir == -1:
+            print('FIRE BALL LEFT')
+        elif self.face_dir == 1:
+            print('FIRE BALL RIGHT')
